@@ -16,7 +16,7 @@ const formatDate = (dateString: string) => {
   return `${day} ${month} ${year}`;
 };
 
-export default function Mensajes() {
+export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState({
@@ -204,7 +204,7 @@ export default function Mensajes() {
       </div>
 
       {/* Custom Scrollbar Styles */}
-      <style jsx global>{`
+      <style>{`
         section#mensajes::-webkit-scrollbar {
           width: 8px;
         }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchGifts, reserveGift, type Gift } from '../lib/api';
 
-export default function Regalos() {
+export default function Gifts() {
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'economico' | 'moderado' | 'premium'>('todos');

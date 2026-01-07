@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchGuests, updateGuestConfirmation, type Guest } from '../lib/api';
 
-export default function RSVP() {
+export default function Assist() {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,7 +47,7 @@ export default function RSVP() {
     return name.charAt(0).toUpperCase();
   };
 
-  const scrollToRegalos = () => {
+  const scrollToGifts = () => {
     const element = document.getElementById('regalos');
     if (element) {
       const offset = 80;
@@ -180,7 +180,7 @@ export default function RSVP() {
 
           {/* Call to Action Button */}
           <button
-            onClick={scrollToRegalos}
+            onClick={scrollToGifts}
             className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg hover:shadow-xl"
           >
             <span>Quiero compartir un presente o un mensaje</span>
