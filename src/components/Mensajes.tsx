@@ -1,12 +1,5 @@
-import { useState } from 'react';
-
-interface Message {
-  id: number;
-  name: string;
-  message: string;
-  date: string;
-  likes: number;
-}
+import { useState, useEffect } from 'react';
+import { fetchMessages, createMessage, likeMessage, type Message } from '../lib/api';
 
 const avatarColors = ['bg-pink-500', 'bg-purple-500', 'bg-blue-500'];
 
@@ -24,54 +17,64 @@ const formatDate = (dateString: string) => {
 };
 
 export default function Mensajes() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      name: 'Beatriz de Clavijo',
-      message: '¡Felicidades! Que Emily llegue llena de salud y bendiciones. Estamos muy felices por ustedes.',
-      date: '2025-12-13',
-      likes: 1,
-    },
-    {
-      id: 2,
-      name: 'Maria Fernanda Ortiz Castillo',
-      message: 'Muchas bendiciones para Emily y toda la familia. Que este nuevo capítulo esté lleno de amor y alegría.',
-      date: '2025-12-13',
-      likes: 0,
-    },
-    {
-      id: 3,
-      name: 'Laura Núñez',
-      message: '¡Qué hermoso momento! Emily será muy afortunada de tener una familia tan especial. Bendiciones infinitas.',
-      date: '2025-12-12',
-      likes: 2,
-    },
-  ]);
-
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState({
     name: '',
     message: '',
   });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newMessage.name && newMessage.message) {
-      const message: Message = {
-        id: messages.length + 1,
-        name: newMessage.name,
-        message: newMessage.message,
-        date: new Date().toISOString().split('T')[0],
-        likes: 0,
-      };
-      setMessages([message, ...messages]);
-      setNewMessage({ name: '', message: '' });
+  useEffect(() => {
+    loadMessages();
+  }, []);
+
+  const loadMessages = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchMessages();
+      // Sort by created_at descending (newest first)
+      const sorted = data.sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      setMessages(sorted);
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      setMessages([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleLike = (id: number) => {
-    setMessages(messages.map(msg => 
-      msg.id === id ? { ...msg, likes: msg.likes + 1 } : msg
-    ));
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.name || !newMessage.message) return;
+
+    try {
+      setSubmitting(true);
+      const created = await createMessage(
+        newMessage.name.trim(),
+        newMessage.message.trim()
+      );
+      setMessages([created, ...messages]);
+      setNewMessage({ name: '', message: '' });
+    } catch (error) {
+      console.error('Error creating message:', error);
+      alert('Error al enviar el mensaje. Por favor intenta de nuevo.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleLike = async (messageId: string) => {
+    try {
+      const updated = await likeMessage(messageId);
+      setMessages(messages.map(msg => 
+        msg.id === messageId ? updated : msg
+      ));
+    } catch (error) {
+      console.error('Error liking message:', error);
+    }
   };
 
   const getInitial = (name: string) => {
@@ -112,6 +115,7 @@ export default function Mensajes() {
               onChange={(e) => setNewMessage({ ...newMessage, name: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
               required
+              disabled={submitting}
             />
             <textarea
               placeholder="Escribe tu mensaje aquí..."
@@ -120,60 +124,83 @@ export default function Mensajes() {
               onChange={(e) => setNewMessage({ ...newMessage, message: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition resize-none"
               required
+              disabled={submitting}
             />
             <button
               type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
+              disabled={submitting}
+              className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-pink-300 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-              </svg>
-              <span>Enviar Mensaje</span>
+              {submitting ? (
+                <>Enviando...</>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                  </svg>
+                  <span>Enviar Mensaje</span>
+                </>
+              )}
             </button>
           </form>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Cargando mensajes...</p>
+          </div>
+        )}
+
         {/* Messages List */}
-        <div className="space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={msg.id}
-              className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow relative"
-            >
-              {/* Like Button - Top Right */}
-              <button
-                onClick={() => handleLike(msg.id)}
-                className="absolute top-4 right-4 flex items-center gap-1 text-gray-400 hover:text-pink-500 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                </svg>
-                <span className="text-sm">{msg.likes}</span>
-              </button>
-
-              {/* Message Content */}
-              <div className="flex items-start gap-4 pr-12">
-                {/* Avatar */}
-                <div className={`flex-shrink-0 w-12 h-12 ${getAvatarColor(index)} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
-                  {getInitial(msg.name)}
-                </div>
-
-                {/* Message Info */}
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-800 text-lg mb-1">
-                    {msg.name}
-                  </h4>
-                  <p className="text-sm text-gray-500 mb-3">
-                    {formatDate(msg.date)}
-                  </p>
-                  <p className="text-gray-700 leading-relaxed">
-                    {msg.message}
-                  </p>
-                </div>
+        {!loading && (
+          <div className="space-y-4">
+            {messages.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Aún no hay mensajes. ¡Sé el primero en dejar una bendición!</p>
               </div>
-            </div>
-          ))}
-        </div>
+            ) : (
+              messages.map((msg, index) => (
+                <div
+                  key={msg.id}
+                  className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow relative"
+                >
+                  {/* Like Button - Top Right */}
+                  <button
+                    onClick={() => handleLike(msg.id)}
+                    className="absolute top-4 right-4 flex items-center gap-1 text-gray-400 hover:text-pink-500 transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    <span className="text-sm">{msg.likes}</span>
+                  </button>
+
+                  {/* Message Content */}
+                  <div className="flex items-start gap-4 pr-12">
+                    {/* Avatar */}
+                    <div className={`flex-shrink-0 w-12 h-12 ${getAvatarColor(index)} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
+                      {getInitial(msg.author_name)}
+                    </div>
+
+                    {/* Message Info */}
+                    <div className="flex-1">
+                      <h4 className="font-bold text-gray-800 text-lg mb-1">
+                        {msg.author_name}
+                      </h4>
+                      <p className="text-sm text-gray-500 mb-3">
+                        {formatDate(msg.created_at)}
+                      </p>
+                      <p className="text-gray-700 leading-relaxed">
+                        {msg.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* Custom Scrollbar Styles */}

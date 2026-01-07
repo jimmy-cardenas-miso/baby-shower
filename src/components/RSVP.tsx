@@ -1,43 +1,49 @@
-import { useState } from 'react';
-
-interface Attendee {
-  id: number;
-  name: string;
-  confirmed: boolean | null; // null = no confirmado, true = sí, false = no
-}
-
-const initialAttendees: Attendee[] = [
-  { id: 1, name: 'Abdón Guzmán', confirmed: null },
-  { id: 2, name: 'Abraham Alí', confirmed: null },
-  { id: 3, name: 'Abuelito Valdo Oswaldo Clavijo', confirmed: true },
-  { id: 4, name: 'Alejandra Ferro', confirmed: true },
-  { id: 5, name: 'Alejandra Rodríguez', confirmed: null },
-  { id: 6, name: 'Ana María López', confirmed: true },
-  { id: 7, name: 'Carlos Mendoza', confirmed: null },
-  { id: 8, name: 'Diego Hernández', confirmed: true },
-  { id: 9, name: 'Xiomy García', confirmed: true },
-  { id: 10, name: 'María González', confirmed: true },
-  { id: 11, name: 'Juan Pérez', confirmed: null },
-  { id: 12, name: 'Laura Martínez', confirmed: true },
-];
+import { useState, useEffect } from 'react';
+import { fetchGuests, updateGuestConfirmation, type Guest } from '../lib/api';
 
 export default function RSVP() {
-  const [attendees, setAttendees] = useState<Attendee[]>(initialAttendees);
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleConfirm = (id: number, confirmed: boolean) => {
-    setAttendees(attendees.map(attendee => 
-      attendee.id === id ? { ...attendee, confirmed } : attendee
-    ));
+  useEffect(() => {
+    loadGuests();
+  }, []);
+
+  const loadGuests = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchGuests();
+      setGuests(data);
+    } catch (error) {
+      console.error('Error loading guests:', error);
+      // Fallback to empty array on error
+      setGuests([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filteredAttendees = attendees.filter(attendee =>
-    attendee.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const handleConfirm = async (id: number, confirmed: boolean) => {
+    try {
+      const updatedGuest = await updateGuestConfirmation(id, confirmed);
+      setGuests(guests.map(guest => 
+        guest.id === id ? updatedGuest : guest
+      ));
+    } catch (error) {
+      console.error('Error updating guest:', error);
+      alert('Error al actualizar la confirmación. Por favor intenta de nuevo.');
+    }
+  };
+
+  const filteredGuests = guests.filter(guest =>
+    guest.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const confirmedCount = attendees.filter(a => a.confirmed === true).length;
+  const confirmedCount = guests.filter(g => g.confirmed === true).length;
 
-  const getInitial = (name: string) => {
+  const getInitial = (name: string | null) => {
+    if (!name) return '?';
     return name.charAt(0).toUpperCase();
   };
 
@@ -93,65 +99,74 @@ export default function RSVP() {
             </div>
           </div>
 
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Cargando invitados...</p>
+            </div>
+          )}
+
           {/* Attendees List */}
-          <div className="max-h-96 overflow-y-auto mb-6 space-y-3 pr-2">
-            {filteredAttendees.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">No se encontraron resultados</p>
-            ) : (
-              filteredAttendees.map((attendee) => (
-                <div
-                  key={attendee.id}
-                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  {/* Avatar */}
-                  <div className="flex-shrink-0 w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                    {getInitial(attendee.name)}
-                  </div>
+          {!loading && (
+            <div className="max-h-96 overflow-y-auto mb-6 space-y-3 pr-2">
+              {filteredGuests.length === 0 ? (
+                <p className="text-center text-gray-500 py-8">No se encontraron resultados</p>
+              ) : (
+                filteredGuests.map((guest) => (
+                  <div
+                    key={guest.id}
+                    className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    {/* Avatar */}
+                    <div className="flex-shrink-0 w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                      {getInitial(guest.name)}
+                    </div>
 
-                  {/* Name and Status */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-gray-800 font-medium truncate">{attendee.name}</p>
-                    {attendee.confirmed === true && (
-                      <div className="flex items-center gap-1 mt-1">
-                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-sm text-green-600 font-medium">Confirmado</span>
-                      </div>
-                    )}
-                  </div>
+                    {/* Name and Status */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-gray-800 font-medium truncate">{guest.name || 'Sin nombre'}</p>
+                      {guest.confirmed && (
+                        <div className="flex items-center gap-1 mt-1">
+                          <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-sm text-green-600 font-medium">Confirmado</span>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleConfirm(attendee.id, true)}
-                      className={`
-                        px-4 py-2 rounded-lg font-medium text-sm transition-colors
-                        ${attendee.confirmed === true
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }
-                      `}
-                    >
-                      ✓ Sí
-                    </button>
-                    <button
-                      onClick={() => handleConfirm(attendee.id, false)}
-                      className={`
-                        px-4 py-2 rounded-lg font-medium text-sm transition-colors
-                        ${attendee.confirmed === false
-                          ? 'bg-red-500 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }
-                      `}
-                    >
-                      × No
-                    </button>
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleConfirm(guest.id, true)}
+                        className={`
+                          px-4 py-2 rounded-lg font-medium text-sm transition-colors
+                          ${guest.confirmed === true
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }
+                        `}
+                      >
+                        ✓ Sí
+                      </button>
+                      <button
+                        onClick={() => handleConfirm(guest.id, false)}
+                        className={`
+                          px-4 py-2 rounded-lg font-medium text-sm transition-colors
+                          ${guest.confirmed === false
+                            ? 'bg-red-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }
+                        `}
+                      >
+                        × No
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
+            </div>
+          )}
 
           {/* Confirmation Summary */}
           <div className="flex justify-center mb-6">

@@ -1,90 +1,63 @@
-import { useState } from 'react';
-
-interface Gift {
-  id: number;
-  title: string;
-  description: string;
-  priceRange: string;
-  category: 'economico' | 'moderado' | 'premium';
-  image: string;
-  reservedBy: string[];
-  productUrl?: string;
-}
-
-const gifts: Gift[] = [
-  {
-    id: 1,
-    title: 'Pañales Etapa 2 (Paquete Grande)',
-    description: 'Paquete de pañales etapa 2',
-    priceRange: 'menor a 100 mil',
-    category: 'economico',
-    image: 'https://via.placeholder.com/200x200?text=Pañales',
-    reservedBy: ['Jolie', 'Giovanni Clavijo', 'Germán y Matilde'],
-    productUrl: '#',
-  },
-  {
-    id: 2,
-    title: 'Set de paños/baberos',
-    description: 'Set de 6 Paños Surtidos',
-    priceRange: 'menor a 100 mil',
-    category: 'economico',
-    image: 'https://via.placeholder.com/200x200?text=Paños',
-    reservedBy: ['Valeria'],
-    productUrl: '#',
-  },
-  {
-    id: 3,
-    title: 'Pijamas de Bebé (6-9 meses)',
-    description: 'Conjuntos de pijamas (6-9 meses)',
-    priceRange: 'menor a 100 mil',
-    category: 'economico',
-    image: 'https://via.placeholder.com/200x200?text=Pijamas',
-    reservedBy: ['Lina Álvarez', 'Jolie', 'Carol y eliana'],
-    productUrl: '#',
-  },
-  {
-    id: 4,
-    title: 'Gorro de Bebé',
-    description: 'Gorro suave para recién nacido',
-    priceRange: 'menor a 100 mil',
-    category: 'economico',
-    image: 'https://via.placeholder.com/200x200?text=Gorro',
-    reservedBy: [],
-    productUrl: '#',
-  },
-  {
-    id: 5,
-    title: 'Toallitas Húmedas',
-    description: 'Paquete grande de toallitas húmedas',
-    priceRange: 'menor a 100 mil',
-    category: 'economico',
-    image: 'https://via.placeholder.com/200x200?text=Toallitas',
-    reservedBy: ['María'],
-    productUrl: '#',
-  },
-  {
-    id: 6,
-    title: 'Cuna Portátil',
-    description: 'Cuna portátil plegable',
-    priceRange: '100 mil - 300 mil',
-    category: 'moderado',
-    image: 'https://via.placeholder.com/200x200?text=Cuna',
-    reservedBy: ['Carlos'],
-    productUrl: '#',
-  },
-];
+import { useState, useEffect } from 'react';
+import { fetchGifts, reserveGift, type Gift } from '../lib/api';
 
 export default function Regalos() {
+  const [gifts, setGifts] = useState<Gift[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'todos' | 'economico' | 'moderado' | 'premium'>('todos');
+  const [reservingGiftId, setReservingGiftId] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadGifts();
+  }, []);
+
+  const loadGifts = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchGifts();
+      setGifts(data);
+    } catch (error) {
+      console.error('Error loading gifts:', error);
+      // Fallback to empty array on error
+      setGifts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredGifts = activeFilter === 'todos' 
     ? gifts 
     : gifts.filter(gift => gift.category === activeFilter);
 
-  const handleReserve = (giftId: number) => {
-    // Aquí iría la lógica para reservar un regalo
-    console.log('Reservar regalo:', giftId);
-    // En producción, esto haría una llamada a la API
+  const handleReserve = async (giftId: string) => {
+    const userName = prompt('Por favor, ingresa tu nombre para reservar este regalo:');
+    if (!userName || !userName.trim()) return;
+
+    try {
+      setReservingGiftId(giftId);
+      const updatedGift = await reserveGift(giftId, userName.trim());
+      setGifts(gifts.map(g => g.id === giftId ? updatedGift : g));
+    } catch (error) {
+      console.error('Error reserving gift:', error);
+      alert('Error al reservar el regalo. Por favor intenta de nuevo.');
+    } finally {
+      setReservingGiftId(null);
+    }
+  };
+
+  const getReservations = (gift: Gift): string[] => {
+    // Use reservations array if available, otherwise fallback to reserved_by
+    if (gift.reservations && gift.reservations.length > 0) {
+      return gift.reservations;
+    }
+    if (gift.reserved_by) {
+      return [gift.reserved_by];
+    }
+    return [];
+  };
+
+  const isAvailable = (gift: Gift): boolean => {
+    return gift.status === 'available' || gift.status === null;
   };
 
   return (
@@ -165,86 +138,121 @@ export default function Regalos() {
           </button>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Cargando regalos...</p>
+          </div>
+        )}
+
         {/* Gifts Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGifts.map((gift) => (
-            <div
-              key={gift.id}
-              className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden"
-            >
-              {/* Product Image */}
-              <div className="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                <img
-                  src={gift.image}
-                  alt={gift.title}
-                  className="w-full h-full object-cover"
-                />
+        {!loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredGifts.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-600">No hay regalos disponibles en esta categoría.</p>
               </div>
+            ) : (
+              filteredGifts.map((gift) => {
+                const reservations = getReservations(gift);
+                const available = isAvailable(gift);
 
-              {/* Product Info */}
-              <div className="p-5">
-                {/* Price Range */}
-                <p className="text-xs text-gray-500 mb-2">{gift.priceRange}</p>
-
-                {/* Title */}
-                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                  {gift.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-gray-600 mb-4">{gift.description}</p>
-
-                {/* Reservations */}
-                {gift.reservedBy.length > 0 && (
-                  <div className="mb-4">
-                    <div className="flex items-center gap-1 mb-2">
-                      <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                      </svg>
-                      <span className="text-sm text-gray-600">
-                        {gift.reservedBy.length} {gift.reservedBy.length === 1 ? 'persona ha reservado' : 'personas han reservado'}
-                      </span>
+                return (
+                  <div
+                    key={gift.id}
+                    className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+                  >
+                    {/* Product Image */}
+                    <div className="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                      {gift.image_url ? (
+                        <img
+                          src={gift.image_url}
+                          alt={gift.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="text-6xl">{gift.icon || '🐣'}</div>
+                      )}
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {gift.reservedBy.map((name, index) => (
-                        <span
-                          key={index}
-                          className="bg-pink-100 text-pink-700 text-xs font-medium px-3 py-1 rounded-full"
-                        >
-                          {name}
-                        </span>
-                      ))}
+
+                    {/* Product Info */}
+                    <div className="p-5">
+                      {/* Price Range */}
+                      <p className="text-xs text-gray-500 mb-2">{gift.price_range}</p>
+
+                      {/* Title */}
+                      <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                        {gift.name}
+                      </h3>
+
+                      {/* Description */}
+                      {gift.description && (
+                        <p className="text-sm text-gray-600 mb-4">{gift.description}</p>
+                      )}
+
+                      {/* Reservations */}
+                      {reservations.length > 0 && (
+                        <div className="mb-4">
+                          <div className="flex items-center gap-1 mb-2">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <span className="text-sm text-gray-600">
+                              {reservations.length} {reservations.length === 1 ? 'persona ha reservado' : 'personas han reservado'}
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {reservations.map((name, index) => (
+                              <span
+                                key={index}
+                                className="bg-pink-100 text-pink-700 text-xs font-medium px-3 py-1 rounded-full"
+                              >
+                                {name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 mt-4">
+                        {available && (
+                          <button
+                            onClick={() => handleReserve(gift.id)}
+                            disabled={reservingGiftId === gift.id}
+                            className="flex-1 bg-pink-500 hover:bg-pink-600 disabled:bg-pink-300 text-white font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
+                          >
+                            {reservingGiftId === gift.id ? (
+                              <>Reservando...</>
+                            ) : (
+                              <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Reservar</span>
+                              </>
+                            )}
+                          </button>
+                        )}
+                        {gift.product_url && (
+                          <button
+                            onClick={() => window.open(gift.product_url!, '_blank')}
+                            className="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                            <span>Ver Producto</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                )}
-
-                {/* Action Buttons */}
-                <div className="flex gap-2 mt-4">
-                  <button
-                    onClick={() => handleReserve(gift.id)}
-                    className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>Reservar</span>
-                  </button>
-                  {gift.productUrl && (
-                    <button
-                      onClick={() => window.open(gift.productUrl, '_blank')}
-                      className="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                      </svg>
-                      <span>Ver Producto</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                );
+              })
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
