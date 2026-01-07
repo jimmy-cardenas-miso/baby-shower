@@ -2,22 +2,22 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero.astro';
-import Countdown from '../components/Countdown';
 import EventInfo from '../components/EventInfo.astro';
 import RSVP from '../components/RSVP';
 import Regalos from '../components/Regalos';
 import Mensajes from '../components/Mensajes';
+import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Baby Shower Almita">
+<Layout title="Baby Shower Emily">
   <Navbar client:load />
   <main class="min-h-screen pt-16">
     <Hero />
-    <Countdown client:load />
     <EventInfo />
     <RSVP client:load />
     <Regalos client:load />
     <Mensajes client:load />
   </main>
+  <Footer />
 </Layout>
 

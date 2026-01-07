@@ -1,52 +1,157 @@
 ---
 ---
 
-<section id="informacion" class="py-20 px-4 sm:px-6 lg:px-8 bg-white/50">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-12">
-      Información del Evento
-    </h2>
+<section id="informacion" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <div class="inline-block mb-4">
+        <span class="bg-green-500 text-white text-sm font-medium px-4 py-1.5 rounded-full">
+          Información del Evento
+        </span>
+      </div>
+      <h2 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
+        Detalles del Baby Shower
+      </h2>
+      <p class="text-lg text-gray-600">
+        Toda la información que necesitas para celebrar con nosotros
+      </p>
+    </div>
     
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
+    <!-- Two Column Cards -->
+    <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+      <!-- Left Card - Event Details -->
+      <div class="bg-white rounded-3xl p-8 shadow-lg">
+        <!-- Date -->
+        <div class="flex items-center gap-4 mb-6">
+          <div class="flex-shrink-0 w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-gray-800 font-semibold">Fecha</p>
+            <p class="text-gray-600">Sábado, 13 de Diciembre 2025</p>
+          </div>
+        </div>
+        
+        <!-- Time -->
+        <div class="flex items-center gap-4 mb-6">
+          <div class="flex-shrink-0 w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-gray-800 font-semibold">Horario</p>
+            <p class="text-gray-600">3:00 PM - 7:00 PM</p>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="flex items-start gap-4 mb-8">
+          <div class="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mt-1">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
           </div>
           <div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">Ubicación</h3>
-            <p class="text-gray-600">Dirección del evento</p>
-            <p class="text-gray-600">Ciudad, País</p>
+            <p class="text-gray-800 font-semibold">Ubicación</p>
+            <p class="text-gray-600">Bogotá, Conjunto Mazurén 10</p>
+            <p class="text-gray-600">CII 151 #54-38, Salón Comunal</p>
           </div>
+        </div>
+        
+        <!-- Buttons -->
+        <div class="space-y-3">
+          <button 
+            onclick="window.open('https://maps.google.com', '_blank')"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+            <span>Cómo Llegar</span>
+          </button>
+          <button 
+            onclick="document.getElementById('confirmar')?.scrollIntoView({ behavior: 'smooth' })"
+            class="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+            <span>Confirmar mi asistencia ↓</span>
+          </button>
         </div>
       </div>
       
-      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
+      <!-- Right Card - Welcome & Recommendations -->
+      <div class="bg-white rounded-3xl p-8 shadow-lg">
+        <!-- Welcome Message -->
+        <div class="mb-8">
+          <h3 class="text-2xl sm:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 leading-tight">
+            TE ESPERAMOS ESE DIA MAGICO LLENO DE AMOR
+          </h3>
+          
+          <!-- Illustration - Family in Car -->
+          <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl p-6 mb-8 flex items-center justify-center">
+            <div class="text-center w-full">
+              <svg viewBox="0 0 200 120" class="w-full max-w-xs mx-auto mb-2">
+                <!-- Car Body -->
+                <rect x="30" y="60" width="140" height="50" rx="8" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+                <!-- Car Roof -->
+                <path d="M 50 60 L 50 40 L 150 40 L 150 60 Z" fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+                <!-- Windows -->
+                <rect x="60" y="45" width="35" height="20" rx="2" fill="#87CEEB" opacity="0.6"/>
+                <rect x="105" y="45" width="35" height="20" rx="2" fill="#87CEEB" opacity="0.6"/>
+                <!-- Wheels -->
+                <circle cx="60" cy="110" r="12" fill="#333"/>
+                <circle cx="60" cy="110" r="8" fill="#666"/>
+                <circle cx="140" cy="110" r="12" fill="#333"/>
+                <circle cx="140" cy="110" r="8" fill="#666"/>
+                <!-- Man (driver) -->
+                <circle cx="75" cy="50" r="6" fill="#FFDBAC"/>
+                <rect x="70" y="56" width="10" height="8" rx="2" fill="#4A90E2"/>
+                <!-- Woman (passenger) -->
+                <circle cx="120" cy="50" r="6" fill="#FFDBAC"/>
+                <rect x="115" y="56" width="10" height="8" rx="2" fill="#E91E63"/>
+                <!-- Baby -->
+                <circle cx="100" cy="75" r="4" fill="#FFDBAC"/>
+                <rect x="97" y="79" width="6" height="5" rx="1" fill="#FFB6C1"/>
+                <!-- Waving hand -->
+                <path d="M 80 45 Q 85 40 90 45" stroke="#FFDBAC" stroke-width="2" fill="none"/>
+                <!-- License Plate -->
+                <rect x="85" y="100" width="30" height="8" rx="1" fill="#FFF" stroke="#333" stroke-width="1"/>
+                <text x="100" y="106" text-anchor="middle" font-size="6" font-weight="bold" fill="#333">JVR 468</text>
+              </svg>
+            </div>
           </div>
-          <div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">Fecha y Hora</h3>
-            <p class="text-gray-600">Sábado, 31 de Diciembre</p>
-            <p class="text-gray-600">6:00 PM</p>
-          </div>
+        </div>
+        
+        <!-- Recommendations -->
+        <div>
+          <h4 class="text-xl font-bold text-gray-800 mb-4">Recomendaciones</h4>
+          <ol class="space-y-3">
+            <li class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-pink-500 rounded-full text-white text-sm font-semibold flex items-center justify-center">1</span>
+              <span class="text-gray-700">Por favor confirma tu asistencia con anticipación</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-purple-500 rounded-full text-white text-sm font-semibold flex items-center justify-center">2</span>
+              <span class="text-gray-700">El estacionamiento está disponible en el lugar</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full text-white text-sm font-semibold flex items-center justify-center">3</span>
+              <span class="text-gray-700">Habrá comida y bebidas para todos</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-green-500 rounded-full text-white text-sm font-semibold flex items-center justify-center">4</span>
+              <span class="text-gray-700">¡Ven con tu mejor sonrisa y ganas de celebrar!</span>
+            </li>
+          </ol>
         </div>
       </div>
     </div>
-    
-    <div class="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-      <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">Detalles</h3>
-      <p class="text-gray-600 text-center leading-relaxed">
-        Te invitamos a celebrar con nosotros este momento especial. 
-        Habrá comida, bebidas y mucha diversión. ¡Esperamos verte allí!
-      </p>
-    </div>
   </div>
 </section>
-

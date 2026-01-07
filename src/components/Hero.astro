@@ -1,57 +1,136 @@
 ---
 ---
 
-<section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-pink-200/20 via-purple-200/20 to-blue-200/20"></div>
-  
-  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-    <div class="mb-8 animate-fade-in">
-      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 mb-6">
-        Baby Shower
-      </h1>
-      <p class="text-xl sm:text-2xl text-gray-700 font-light">
-        Estamos esperando a nuestro pequeño milagro
-      </p>
-    </div>
-    
-    <div class="mt-12 space-y-4">
-      <div class="flex items-center justify-center gap-2 text-gray-600">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <span class="text-lg">Próximamente</span>
+<section id="inicio" class="relative min-h-screen flex items-center bg-white py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto w-full">
+    <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <!-- Left Column - Text Content -->
+      <div class="space-y-6">
+        <!-- Tag -->
+        <div class="inline-block">
+          <span class="bg-pink-500 text-white text-sm font-medium px-4 py-2 rounded-full">
+            Una celebración especial
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
+          Baby Shower
+        </h1>
+
+        <!-- Name -->
+        <h2 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-pink-500 leading-tight">
+          Emily
+        </h2>
+
+        <!-- Paragraphs -->
+        <div class="space-y-4 pt-4">
+          <p class="text-gray-600 text-lg leading-relaxed">
+            Te invitamos a celebrar la llegada de nuestro más grande tesoro.
+          </p>
+          <p class="text-gray-600 text-lg leading-relaxed">
+            Revisa aquí los detalles, confirma tu asistencia, comparte un detalle y un mensaje para disfrutar un momento mágico lleno de amor, risas y bendiciones.
+          </p>
+        </div>
+
+        <!-- Button -->
+        <div class="pt-4">
+          <button
+            onclick="document.getElementById('informacion')?.scrollIntoView({ behavior: 'smooth' })"
+            class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 px-8 rounded-xl flex items-center gap-2 transition-colors shadow-lg hover:shadow-xl"
+          >
+            <span>¡Me encanta! Quiero saber más</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column - Illustration Card -->
+      <div class="relative">
+        <div class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 rounded-3xl p-8 sm:p-12 shadow-lg">
+          <!-- Family Illustration -->
+          <div class="relative w-full aspect-square max-w-md mx-auto">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <!-- Background elements -->
+              <circle cx="200" cy="200" r="180" fill="rgba(255, 255, 255, 0.3)"/>
+              
+              <!-- Woman (left) -->
+              <g transform="translate(100, 150)">
+                <!-- Body -->
+                <ellipse cx="0" cy="40" rx="25" ry="50" fill="#D4A574"/>
+                <!-- Head -->
+                <circle cx="0" cy="-20" r="20" fill="#F4D1AE"/>
+                <!-- Hair -->
+                <path d="M -25 -20 Q -30 -35 -20 -40 Q -10 -45 0 -40 Q 10 -45 20 -40 Q 30 -35 25 -20" fill="#8B4513"/>
+                <!-- Arms -->
+                <ellipse cx="-30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(-20 -30 30)"/>
+                <ellipse cx="30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(20 30 30)"/>
+                <!-- Waving hand -->
+                <circle cx="35" cy="10" r="6" fill="#F4D1AE"/>
+              </g>
+
+              <!-- Man (right) -->
+              <g transform="translate(300, 150)">
+                <!-- Body -->
+                <ellipse cx="0" cy="40" rx="25" ry="50" fill="#F5DEB3"/>
+                <!-- Head -->
+                <circle cx="0" cy="-20" r="20" fill="#F4D1AE"/>
+                <!-- Beard -->
+                <ellipse cx="0" cy="-5" rx="12" ry="15" fill="#8B4513"/>
+                <!-- Arms -->
+                <ellipse cx="-30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(-20 -30 30)"/>
+                <ellipse cx="30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(20 30 30)"/>
+                <!-- Waving hand -->
+                <circle cx="35" cy="10" r="6" fill="#F4D1AE"/>
+              </g>
+
+              <!-- Baby (center) -->
+              <g transform="translate(200, 180)">
+                <!-- Body -->
+                <ellipse cx="0" cy="15" rx="15" ry="25" fill="#FFD700"/>
+                <!-- Head -->
+                <circle cx="0" cy="-10" r="15" fill="#F4D1AE"/>
+                <!-- Arms -->
+                <ellipse cx="-18" cy="5" rx="5" ry="12" fill="#F4D1AE" transform="rotate(-15 -18 5)"/>
+                <ellipse cx="18" cy="5" rx="5" ry="12" fill="#F4D1AE" transform="rotate(15 18 5)"/>
+                <!-- Waving hand -->
+                <circle cx="20" cy="-5" r="4" fill="#F4D1AE"/>
+              </g>
+
+              <!-- Dog (left front) -->
+              <g transform="translate(120, 280)">
+                <!-- Body -->
+                <ellipse cx="0" cy="0" rx="20" ry="15" fill="#2C2C2C"/>
+                <!-- Head -->
+                <ellipse cx="0" cy="-15" rx="15" ry="12" fill="#2C2C2C"/>
+                <!-- White patch -->
+                <ellipse cx="0" cy="-10" rx="8" ry="6" fill="#FFFFFF"/>
+                <!-- Ears -->
+                <ellipse cx="-12" cy="-20" rx="5" ry="8" fill="#2C2C2C" transform="rotate(-30)"/>
+                <ellipse cx="12" cy="-20" rx="5" ry="8" fill="#2C2C2C" transform="rotate(30)"/>
+                <!-- Legs -->
+                <rect x="-15" y="10" width="6" height="15" rx="3" fill="#2C2C2C"/>
+                <rect x="9" y="10" width="6" height="15" rx="3" fill="#2C2C2C"/>
+              </g>
+
+              <!-- Cat (right front) -->
+              <g transform="translate(280, 290)">
+                <!-- Body -->
+                <ellipse cx="0" cy="0" rx="15" ry="12" fill="#FFFFFF"/>
+                <!-- Head -->
+                <circle cx="0" cy="-10" r="10" fill="#FFFFFF"/>
+                <!-- Ears -->
+                <path d="M -8 -15 L -5 -25 L -2 -15 Z" fill="#FFFFFF"/>
+                <path d="M 8 -15 L 5 -25 L 2 -15 Z" fill="#FFFFFF"/>
+                <!-- Tail -->
+                <ellipse cx="12" cy="5" rx="8" ry="3" fill="#FFFFFF" transform="rotate(30)"/>
+              </g>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  
-  <!-- Decorative elements -->
-  <div class="absolute top-20 left-10 w-20 h-20 bg-pink-200 rounded-full opacity-30 blur-xl animate-pulse"></div>
-  <div class="absolute bottom-20 right-10 w-32 h-32 bg-purple-200 rounded-full opacity-30 blur-xl animate-pulse delay-1000"></div>
-  <div class="absolute top-1/2 right-20 w-24 h-24 bg-blue-200 rounded-full opacity-30 blur-xl animate-pulse delay-500"></div>
 </section>
-
-<style>
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-fade-in {
-    animation: fade-in 1s ease-out;
-  }
-  
-  .delay-500 {
-    animation-delay: 0.5s;
-  }
-  
-  .delay-1000 {
-    animation-delay: 1s;
-  }
-</style>
-

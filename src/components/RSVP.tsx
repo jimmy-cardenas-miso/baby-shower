@@ -1,145 +1,180 @@
 import { useState } from 'react';
 
-export default function RSVP() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    guests: '1',
-    message: '',
-  });
-  const [submitted, setSubmitted] = useState(false);
+interface Attendee {
+  id: number;
+  name: string;
+  confirmed: boolean | null; // null = no confirmado, true = sí, false = no
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the data to a backend
-    console.log('RSVP submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', guests: '1', message: '' });
-    }, 3000);
+const initialAttendees: Attendee[] = [
+  { id: 1, name: 'Abdón Guzmán', confirmed: null },
+  { id: 2, name: 'Abraham Alí', confirmed: null },
+  { id: 3, name: 'Abuelito Valdo Oswaldo Clavijo', confirmed: true },
+  { id: 4, name: 'Alejandra Ferro', confirmed: true },
+  { id: 5, name: 'Alejandra Rodríguez', confirmed: null },
+  { id: 6, name: 'Ana María López', confirmed: true },
+  { id: 7, name: 'Carlos Mendoza', confirmed: null },
+  { id: 8, name: 'Diego Hernández', confirmed: true },
+  { id: 9, name: 'Xiomy García', confirmed: true },
+  { id: 10, name: 'María González', confirmed: true },
+  { id: 11, name: 'Juan Pérez', confirmed: null },
+  { id: 12, name: 'Laura Martínez', confirmed: true },
+];
+
+export default function RSVP() {
+  const [attendees, setAttendees] = useState<Attendee[]>(initialAttendees);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleConfirm = (id: number, confirmed: boolean) => {
+    setAttendees(attendees.map(attendee => 
+      attendee.id === id ? { ...attendee, confirmed } : attendee
+    ));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const filteredAttendees = attendees.filter(attendee =>
+    attendee.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const confirmedCount = attendees.filter(a => a.confirmed === true).length;
+
+  const getInitial = (name: string) => {
+    return name.charAt(0).toUpperCase();
+  };
+
+  const scrollToRegalos = () => {
+    const element = document.getElementById('regalos');
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
-    <section id="confirmar" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-12">
-          Confirma tu Asistencia
-        </h2>
-        
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-          {submitted ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  className="w-8 h-8 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  />
+    <section id="confirmar" className="py-20 px-4 sm:px-6 lg:px-8 bg-pink-50">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-block mb-4">
+            <span className="bg-purple-500 text-white text-sm font-medium px-4 py-1.5 rounded-full">
+              Confirmación de Asistencia
+            </span>
+          </div>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
+            ¿Nos acompañas?
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Para confirmar tu asistencia, busca tu nombre o el de tu acompañante en la lista. 
+            Si no encuentras tu nombre, por favor contáctanos a Diego o Xiomy.
+          </p>
+        </div>
+
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg">
+          {/* Search Bar */}
+          <div className="mb-6">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
-              <p className="text-xl text-gray-800 font-semibold">
-                ¡Gracias por confirmar!
-              </p>
-              <p className="text-gray-600 mt-2">
-                Te esperamos en el evento
-              </p>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
+                placeholder="Buscar por nombre..."
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre Completo
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
-                  placeholder="Tu nombre"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
-                  placeholder="tu@email.com"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-2">
-                  Número de Invitados
-                </label>
-                <select
-                  id="guests"
-                  name="guests"
-                  value={formData.guests}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
+          </div>
+
+          {/* Attendees List */}
+          <div className="max-h-96 overflow-y-auto mb-6 space-y-3 pr-2">
+            {filteredAttendees.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No se encontraron resultados</p>
+            ) : (
+              filteredAttendees.map((attendee) => (
+                <div
+                  key={attendee.id}
+                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <option value="1">1 persona</option>
-                  <option value="2">2 personas</option>
-                  <option value="3">3 personas</option>
-                  <option value="4">4 personas</option>
-                  <option value="5+">5+ personas</option>
-                </select>
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Mensaje (opcional)
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition resize-none"
-                  placeholder="Déjanos un mensaje..."
-                />
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                Confirmar Asistencia
-              </button>
-            </form>
-          )}
+                  {/* Avatar */}
+                  <div className="flex-shrink-0 w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                    {getInitial(attendee.name)}
+                  </div>
+
+                  {/* Name and Status */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-800 font-medium truncate">{attendee.name}</p>
+                    {attendee.confirmed === true && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm text-green-600 font-medium">Confirmado</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleConfirm(attendee.id, true)}
+                      className={`
+                        px-4 py-2 rounded-lg font-medium text-sm transition-colors
+                        ${attendee.confirmed === true
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }
+                      `}
+                    >
+                      ✓ Sí
+                    </button>
+                    <button
+                      onClick={() => handleConfirm(attendee.id, false)}
+                      className={`
+                        px-4 py-2 rounded-lg font-medium text-sm transition-colors
+                        ${attendee.confirmed === false
+                          ? 'bg-red-500 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }
+                      `}
+                    >
+                      × No
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Confirmation Summary */}
+          <div className="flex justify-center mb-6">
+            <div className="bg-pink-100 rounded-full px-4 py-2 flex items-center gap-2">
+              <svg className="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <span className="text-pink-700 font-semibold">{confirmedCount} confirmados</span>
+            </div>
+          </div>
+
+          {/* Call to Action Button */}
+          <button
+            onClick={scrollToRegalos}
+            className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg hover:shadow-xl"
+          >
+            <span>Quiero compartir un presente o un mensaje</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </section>
   );
 }
-
