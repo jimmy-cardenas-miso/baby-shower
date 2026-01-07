@@ -87,10 +87,10 @@ export default function Messages() {
         {/* Header Section */}
         <div className="text-center mb-8">
           {/* Tag */}
-          <div className="inline-flex items-center gap-2 bg-blue-200 text-blue-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
-            </svg>
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
+            <span className="material-symbols-outlined text-base text-blue-700">
+              chat
+            </span>
             <span>Mural de Mensajes</span>
           </div>
 
@@ -135,9 +135,9 @@ export default function Messages() {
                 <>Enviando...</>
               ) : (
                 <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                  </svg>
+                  <span className="material-symbols-outlined text-lg">
+                    send
+                  </span>
                   <span>Enviar Mensaje</span>
                 </>
               )}
@@ -170,9 +170,9 @@ export default function Messages() {
                     onClick={() => handleLike(msg.id)}
                     className="absolute top-4 right-4 flex items-center gap-1 text-gray-400 hover:text-pink-500 transition-colors"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
+                    <span className="material-symbols-outlined text-lg">
+                      favorite
+                    </span>
                     <span className="text-sm">{msg.likes}</span>
                   </button>
 

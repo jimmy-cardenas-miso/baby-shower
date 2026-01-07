@@ -11,46 +11,45 @@ const navItems: NavItem[] = [
     id: 'inicio',
     label: 'Inicio',
     icon: (
-      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-      </svg>
+      <span className="material-symbols-outlined text-pink-500 text-2xl">
+        child_care
+      </span>
     ),
   },
   {
     id: 'informacion',
     label: 'Información',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-      </svg>
+      <span className="material-symbols-outlined">
+        location_on
+      </span>
     ),
   },
   {
     id: 'confirmar',
     label: 'Confirmar',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-      </svg>
+      <span className="material-symbols-outlined">
+        group
+      </span>
     ),
   },
   {
     id: 'regalos',
     label: 'Regalos',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
-      </svg>
+      <span className="material-symbols-outlined">
+        featured_seasonal_and_gifts
+      </span>
     ),
   },
   {
     id: 'mensajes',
     label: 'Mensajes',
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-      </svg>
+      <span className="material-symbols-outlined">
+        chat_bubble
+      </span>
     ),
   },
 ];
@@ -100,47 +99,43 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <svg className="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-            </svg>
+            <span className="material-symbols-outlined text-pink-500 text-2xl">
+              child_care
+            </span>
             <span className="text-xl font-semibold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
               Baby Shower Emily
             </span>
           </div>
 
-          {/* Navigation Items */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Navigation Items - Desktop: with text, Mobile: icons only */}
+          <div className="flex items-center gap-1">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
                 className={`
-                  flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200
+                  flex items-center justify-center transition-all duration-200
+                  p-2 rounded-lg
+                  md:gap-2 md:px-4 md:py-2
                   ${
                     activeSection === item.id
                       ? 'bg-pink-100 text-pink-600'
                       : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
                   }
                 `}
+                title={item.label}
               >
                 <span
-                  className={
+                  className={`flex ${
                     activeSection === item.id ? 'text-pink-600' : 'text-gray-400'
-                  }
+                  }`}
                 >
                   {item.icon}
                 </span>
-                <span className="text-sm font-medium">{item.label}</span>
+                <span className="hidden md:inline text-sm font-medium ml-0">{item.label}</span>
               </button>
             ))}
           </div>
-
-          {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 text-gray-600 hover:text-pink-500">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </button>
         </div>
       </div>
     </nav>

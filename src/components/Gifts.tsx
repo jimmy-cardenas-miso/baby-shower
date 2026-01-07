@@ -66,10 +66,10 @@ export default function Gifts() {
         {/* Header Section */}
         <div className="text-center mb-8">
           {/* Tag */}
-          <div className="inline-flex items-center gap-2 bg-pink-500 text-white text-sm font-medium px-4 py-2 rounded-full mb-4">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
-            </svg>
+          <div className="inline-flex items-center gap-2 bg-pink-100 text-pink-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
+            <span className="material-symbols-outlined text-base text-pink-700">
+              card_giftcard
+            </span>
             <span>Lista de Regalos</span>
           </div>
 
@@ -85,9 +85,9 @@ export default function Gifts() {
 
           {/* Environmental Message */}
           <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 text-sm px-4 py-2 rounded-full mb-8">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-            </svg>
+            <span className="material-symbols-outlined text-base">
+              eco
+            </span>
             <span>
               Cuidemos juntos el medio ambiente, se vale recircular objetos de segunda mano y evitar papel regalo de un sólo uso ❤️
             </span>
@@ -194,9 +194,9 @@ export default function Gifts() {
                       {reservations.length > 0 && (
                         <div className="mb-4">
                           <div className="flex items-center gap-1 mb-2">
-                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
+                            <span className="material-symbols-outlined text-base text-gray-500">
+                              person
+                            </span>
                             <span className="text-sm text-gray-600">
                               {reservations.length} {reservations.length === 1 ? 'persona ha reservado' : 'personas han reservado'}
                             </span>
@@ -226,9 +226,9 @@ export default function Gifts() {
                               <>Reservando...</>
                             ) : (
                               <>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                                <span className="material-symbols-outlined text-base">
+                                  check
+                                </span>
                                 <span>Reservar</span>
                               </>
                             )}
@@ -239,9 +239,9 @@ export default function Gifts() {
                             onClick={() => window.open(gift.product_url!, '_blank')}
                             className="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                            </svg>
+                            <span className="material-symbols-outlined text-base">
+                              open_in_new
+                            </span>
                             <span>Ver Producto</span>
                           </button>
                         )}

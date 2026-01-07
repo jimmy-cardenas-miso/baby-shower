@@ -1,15 +1,19 @@
 ---
+import familyImage from '../assets/family.png';
 ---
 
-<section id="inicio" class="relative min-h-screen flex items-center bg-white py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+<section id="inicio" class="relative min-h-screen flex items-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto w-full">
     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <!-- Left Column - Text Content -->
       <div class="space-y-6">
         <!-- Tag -->
         <div class="inline-block">
-          <span class="bg-pink-500 text-white text-sm font-medium px-4 py-2 rounded-full">
-            Una celebración especial
+          <span class="inline-flex items-center gap-2 bg-pink-100 text-pink-700 text-sm font-medium px-4 py-2 rounded-full">
+            <span class="material-symbols-outlined text-base text-pink-700">
+              celebration
+            </span>
+            <span>Una celebración especial</span>
           </span>
         </div>
 
@@ -40,94 +44,25 @@
             class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 px-8 rounded-xl flex items-center gap-2 transition-colors shadow-lg hover:shadow-xl"
           >
             <span>¡Me encanta! Quiero saber más</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
+            <span class="material-symbols-outlined text-lg">
+              keyboard_arrow_down
+            </span>
           </button>
         </div>
       </div>
 
       <!-- Right Column - Illustration Card -->
       <div class="relative">
-        <div class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 rounded-3xl p-8 sm:p-12 shadow-lg">
+        <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-lg">
           <!-- Family Illustration -->
-          <div class="relative w-full aspect-square max-w-md mx-auto">
-            <svg viewBox="0 0 400 400" class="w-full h-full">
-              <!-- Background elements -->
-              <circle cx="200" cy="200" r="180" fill="rgba(255, 255, 255, 0.3)"/>
-              
-              <!-- Woman (left) -->
-              <g transform="translate(100, 150)">
-                <!-- Body -->
-                <ellipse cx="0" cy="40" rx="25" ry="50" fill="#D4A574"/>
-                <!-- Head -->
-                <circle cx="0" cy="-20" r="20" fill="#F4D1AE"/>
-                <!-- Hair -->
-                <path d="M -25 -20 Q -30 -35 -20 -40 Q -10 -45 0 -40 Q 10 -45 20 -40 Q 30 -35 25 -20" fill="#8B4513"/>
-                <!-- Arms -->
-                <ellipse cx="-30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(-20 -30 30)"/>
-                <ellipse cx="30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(20 30 30)"/>
-                <!-- Waving hand -->
-                <circle cx="35" cy="10" r="6" fill="#F4D1AE"/>
-              </g>
-
-              <!-- Man (right) -->
-              <g transform="translate(300, 150)">
-                <!-- Body -->
-                <ellipse cx="0" cy="40" rx="25" ry="50" fill="#F5DEB3"/>
-                <!-- Head -->
-                <circle cx="0" cy="-20" r="20" fill="#F4D1AE"/>
-                <!-- Beard -->
-                <ellipse cx="0" cy="-5" rx="12" ry="15" fill="#8B4513"/>
-                <!-- Arms -->
-                <ellipse cx="-30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(-20 -30 30)"/>
-                <ellipse cx="30" cy="30" rx="8" ry="25" fill="#F4D1AE" transform="rotate(20 30 30)"/>
-                <!-- Waving hand -->
-                <circle cx="35" cy="10" r="6" fill="#F4D1AE"/>
-              </g>
-
-              <!-- Baby (center) -->
-              <g transform="translate(200, 180)">
-                <!-- Body -->
-                <ellipse cx="0" cy="15" rx="15" ry="25" fill="#FFD700"/>
-                <!-- Head -->
-                <circle cx="0" cy="-10" r="15" fill="#F4D1AE"/>
-                <!-- Arms -->
-                <ellipse cx="-18" cy="5" rx="5" ry="12" fill="#F4D1AE" transform="rotate(-15 -18 5)"/>
-                <ellipse cx="18" cy="5" rx="5" ry="12" fill="#F4D1AE" transform="rotate(15 18 5)"/>
-                <!-- Waving hand -->
-                <circle cx="20" cy="-5" r="4" fill="#F4D1AE"/>
-              </g>
-
-              <!-- Dog (left front) -->
-              <g transform="translate(120, 280)">
-                <!-- Body -->
-                <ellipse cx="0" cy="0" rx="20" ry="15" fill="#2C2C2C"/>
-                <!-- Head -->
-                <ellipse cx="0" cy="-15" rx="15" ry="12" fill="#2C2C2C"/>
-                <!-- White patch -->
-                <ellipse cx="0" cy="-10" rx="8" ry="6" fill="#FFFFFF"/>
-                <!-- Ears -->
-                <ellipse cx="-12" cy="-20" rx="5" ry="8" fill="#2C2C2C" transform="rotate(-30)"/>
-                <ellipse cx="12" cy="-20" rx="5" ry="8" fill="#2C2C2C" transform="rotate(30)"/>
-                <!-- Legs -->
-                <rect x="-15" y="10" width="6" height="15" rx="3" fill="#2C2C2C"/>
-                <rect x="9" y="10" width="6" height="15" rx="3" fill="#2C2C2C"/>
-              </g>
-
-              <!-- Cat (right front) -->
-              <g transform="translate(280, 290)">
-                <!-- Body -->
-                <ellipse cx="0" cy="0" rx="15" ry="12" fill="#FFFFFF"/>
-                <!-- Head -->
-                <circle cx="0" cy="-10" r="10" fill="#FFFFFF"/>
-                <!-- Ears -->
-                <path d="M -8 -15 L -5 -25 L -2 -15 Z" fill="#FFFFFF"/>
-                <path d="M 8 -15 L 5 -25 L 2 -15 Z" fill="#FFFFFF"/>
-                <!-- Tail -->
-                <ellipse cx="12" cy="5" rx="8" ry="3" fill="#FFFFFF" transform="rotate(30)"/>
-              </g>
-            </svg>
+          <div class="relative w-full max-w-full aspect-square mx-auto bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 rounded-2xl p-4 sm:p-6">
+            <img 
+              src={familyImage.src}
+              alt="Familia feliz con bebé" 
+              class="w-full h-full object-contain"
+              width={familyImage.width}
+              height={familyImage.height}
+            />
           </div>
         </div>
       </div>

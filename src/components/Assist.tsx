@@ -66,8 +66,11 @@ export default function Assist() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-block mb-4">
-            <span className="bg-purple-500 text-white text-sm font-medium px-4 py-1.5 rounded-full">
-              Confirmación de Asistencia
+            <span className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 text-sm font-medium px-4 py-1.5 rounded-full">
+              <span className="material-symbols-outlined text-base text-purple-700">
+                group
+              </span>
+              <span>Confirmación de Asistencia</span>
             </span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
@@ -85,9 +88,9 @@ export default function Assist() {
           <div className="mb-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+                <span className="material-symbols-outlined text-lg text-gray-400">
+                  search
+                </span>
               </div>
               <input
                 type="text"
@@ -127,9 +130,9 @@ export default function Assist() {
                       <p className="text-gray-800 font-medium truncate">{guest.name || 'Sin nombre'}</p>
                       {guest.confirmed && (
                         <div className="flex items-center gap-1 mt-1">
-                          <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
+                          <span className="material-symbols-outlined text-base text-green-500">
+                            check_circle
+                          </span>
                           <span className="text-sm text-green-600 font-medium">Confirmado</span>
                         </div>
                       )}
@@ -171,9 +174,9 @@ export default function Assist() {
           {/* Confirmation Summary */}
           <div className="flex justify-center mb-6">
             <div className="bg-pink-100 rounded-full px-4 py-2 flex items-center gap-2">
-              <svg className="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              </svg>
+              <span className="material-symbols-outlined text-lg text-pink-600">
+                group
+              </span>
               <span className="text-pink-700 font-semibold">{confirmedCount} confirmados</span>
             </div>
           </div>
@@ -184,9 +187,9 @@ export default function Assist() {
             className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg hover:shadow-xl"
           >
             <span>Quiero compartir un presente o un mensaje</span>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
+            <span className="material-symbols-outlined text-lg">
+              keyboard_arrow_down
+            </span>
           </button>
         </div>
       </div>
