@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Baby Shower" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  html {
+    font-family: system-ui, sans-serif;
+  }
+</style>
+

@@ -1,0 +1,83 @@
+# Baby Shower Website
+
+Un sitio web moderno de una sola página construido con Astro y React para un baby shower.
+
+## 🚀 Inicio Rápido
+
+### Instalación
+
+```bash
+pnpm install
+```
+
+### Desarrollo
+
+```bash
+pnpm dev
+```
+
+El sitio estará disponible en `http://localhost:4321`
+
+### Build
+
+```bash
+pnpm build
+```
+
+### Preview
+
+```bash
+pnpm preview
+```
+
+## 🛠️ Tecnologías
+
+- **Astro** - Framework web moderno
+- **React** - Para componentes interactivos
+- **Tailwind CSS** - Para estilos
+- **TypeScript** - Para tipado estático
+
+## 📁 Estructura del Proyecto
+
+```
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── components/
+│   │   ├── Hero.astro
+│   │   ├── Countdown.tsx
+│   │   ├── EventInfo.astro
+│   │   └── RSVP.tsx
+│   ├── layouts/
+│   │   └── Layout.astro
+│   └── pages/
+│       └── index.astro
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
+```
+
+## 🎨 Personalización
+
+### Cambiar la fecha del evento
+
+Edita el archivo `src/components/Countdown.tsx` y modifica la variable `eventDate`:
+
+```typescript
+const eventDate = new Date('2024-12-31T18:00:00').getTime();
+```
+
+### Modificar información del evento
+
+Edita el archivo `src/components/EventInfo.astro` para cambiar la ubicación, fecha y detalles.
+
+### Personalizar colores
+
+Los colores están definidos usando clases de Tailwind CSS. Puedes modificar los gradientes y colores en los componentes.
+
+## 📝 Notas
+
+- El formulario RSVP actualmente solo muestra un mensaje de confirmación. Para producción, necesitarás conectar un backend o servicio de formularios.
+- Asegúrate de actualizar la fecha del evento en el componente Countdown antes de desplegar.
+
