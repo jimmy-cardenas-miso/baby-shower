@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Icon from './Icons';
 import { fetchGuests, updateGuestConfirmation, type Guest } from '../lib/api';
 
 export default function Assist() {
@@ -67,9 +68,7 @@ export default function Assist() {
         <div className="text-center mb-6 sm:mb-8">
           <div className="inline-block mb-3 sm:mb-4">
             <span className="inline-flex items-center gap-1.5 sm:gap-2 bg-purple-100 text-purple-700 text-xs sm:text-sm font-medium px-3 sm:px-4 py-1 sm:py-1.5 rounded-full">
-              <span className="material-symbols-outlined text-sm sm:text-base text-purple-700">
-                group
-              </span>
+              <Icon name="group" className="text-purple-700" size={16} />
               <span>Confirmación de Asistencia</span>
             </span>
           </div>
@@ -88,9 +87,7 @@ export default function Assist() {
           <div className="mb-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span className="material-symbols-outlined text-lg text-gray-400">
-                  search
-                </span>
+                <Icon name="search" className="text-gray-400" size={20} />
               </div>
               <input
                 type="text"
@@ -148,7 +145,7 @@ export default function Assist() {
                             }
                           `}
                         >
-                          <span>✓</span>
+                          <Icon name="check" size={16} />
                           <span className="hidden sm:inline ml-1">Sí</span>
                         </button>
                         <button
@@ -161,7 +158,7 @@ export default function Assist() {
                             }
                           `}
                         >
-                          <span>×</span>
+                          <Icon name="close" size={16} />
                           <span className="hidden sm:inline ml-1">No</span>
                         </button>
                       </div>
@@ -175,9 +172,7 @@ export default function Assist() {
           {/* Confirmation Summary */}
           <div className="flex justify-center mb-6">
             <div className="bg-pink-100 rounded-full px-4 py-2 flex items-center gap-2">
-              <span className="material-symbols-outlined text-lg text-pink-600">
-                group
-              </span>
+              <Icon name="group" className="text-pink-600" size={20} />
               <span className="text-sm text-pink-700 font-semibold">{confirmedCount} confirmados</span>
             </div>
           </div>
@@ -188,9 +183,7 @@ export default function Assist() {
             className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg hover:shadow-xl text-base"
           >
             <span>Quiero compartir un presente o un mensaje</span>
-            <span className="material-symbols-outlined text-lg">
-              keyboard_arrow_down
-            </span>
+            <Icon name="keyboard_arrow_down" size={20} />
           </button>
         </div>
       </div>

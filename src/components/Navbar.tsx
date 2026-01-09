@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Icon from './Icons';
 
 interface NavItem {
   id: string;
@@ -11,45 +12,35 @@ const navItems: NavItem[] = [
     id: 'inicio',
     label: 'Inicio',
     icon: (
-      <span className="material-symbols-outlined text-pink-500 text-2xl">
-        child_care
-      </span>
+      <Icon name="child_care" className="text-pink-500" size={24} />
     ),
   },
   {
     id: 'informacion',
     label: 'Información',
     icon: (
-      <span className="material-symbols-outlined">
-        location_on
-      </span>
+      <Icon name="location_on" size={24} />
     ),
   },
   {
     id: 'confirmar',
     label: 'Confirmar',
     icon: (
-      <span className="material-symbols-outlined">
-        group
-      </span>
+      <Icon name="group" size={24} />
     ),
   },
   {
     id: 'regalos',
     label: 'Regalos',
     icon: (
-      <span className="material-symbols-outlined">
-        featured_seasonal_and_gifts
-      </span>
+      <Icon name="featured_seasonal_and_gifts" size={24} />
     ),
   },
   {
     id: 'mensajes',
     label: 'Mensajes',
     icon: (
-      <span className="material-symbols-outlined">
-        chat_bubble
-      </span>
+      <Icon name="chat_bubble" size={24} />
     ),
   },
 ];
@@ -100,9 +91,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="hidden md:inline-flex">
-              <span className="material-symbols-outlined text-pink-500 text-2xl">
-                child_care
-              </span>
+              <Icon name="child_care" className="text-pink-500" size={24} />
             </div>
             <span className="text-sm sm:text-lg md:text-xl font-semibold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
               Baby Shower<br className="md:hidden" /> Emily

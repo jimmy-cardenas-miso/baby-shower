@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { fetchGifts, reserveGift, removeReservation, type Gift } from '../lib/api';
+import Icon from './Icons';
 
 export default function Gifts() {
   const [gifts, setGifts] = useState<Gift[]>([]);
@@ -108,9 +109,7 @@ export default function Gifts() {
         <div className="text-center mb-8">
           {/* Tag */}
           <div className="inline-flex items-center gap-2 bg-pink-100 text-pink-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
-            <span className="material-symbols-outlined text-base text-pink-700">
-              card_giftcard
-            </span>
+            <Icon name="card_giftcard" className="text-pink-700" size={16} />
             <span>Lista de Regalos</span>
           </div>
 
@@ -126,9 +125,7 @@ export default function Gifts() {
 
           {/* Environmental Message */}
           <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 text-sm px-4 py-2 rounded-full mb-8">
-            <span className="material-symbols-outlined text-base">
-              eco
-            </span>
+            <Icon name="eco" size={16} />
             <span>
               Cuidemos juntos el medio ambiente, se vale recircular objetos de segunda mano y evitar papel regalo de un sólo uso ❤️
             </span>
@@ -218,9 +215,7 @@ export default function Gifts() {
                       {reservations.length > 0 && (
                         <div className="mb-4 bg-purple-50 rounded-lg p-3">
                           <div className="flex items-center gap-1 mb-2">
-                            <span className="material-symbols-outlined text-base text-gray-500">
-                              person
-                            </span>
+                            <Icon name="person" className="text-gray-500" size={16} />
                             <span className="text-sm text-gray-600">
                               {reservations.length} {reservations.length === 1 ? 'persona ha reservado' : 'personas han reservado'}
                             </span>
@@ -237,9 +232,7 @@ export default function Gifts() {
                                   className="hover:bg-pink-200 rounded-full p-0.5 transition-colors"
                                   aria-label={`Eliminar reserva de ${name}`}
                                 >
-                                  <span className="material-symbols-outlined text-sm">
-                                    close
-                                  </span>
+                                  <Icon name="close" size={14} />
                                 </button>
                               </span>
                             ))}
@@ -289,9 +282,7 @@ export default function Gifts() {
                               onClick={() => handleReserveClick(gift.id)}
                               className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
                             >
-                              <span className="material-symbols-outlined text-base">
-                                check
-                              </span>
+                              <Icon name="check" size={16} />
                               <span>Reservar</span>
                             </button>
                           )}
@@ -300,9 +291,7 @@ export default function Gifts() {
                               onClick={() => window.open(gift.product_url!, '_blank')}
                               className="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
                             >
-                              <span className="material-symbols-outlined text-base">
-                                open_in_new
-                              </span>
+                              <Icon name="open_in_new" size={16} />
                               <span>Ver Producto</span>
                             </button>
                           )}
