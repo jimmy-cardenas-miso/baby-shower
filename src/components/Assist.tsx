@@ -25,7 +25,7 @@ export default function Assist() {
     }
   };
 
-  const handleConfirm = async (id: number, confirmed: boolean) => {
+  const handleConfirm = async (id: number, confirmed: boolean | null) => {
     try {
       const updatedGuest = await updateGuestConfirmation(id, confirmed);
       setGuests(guests.map(guest =>
@@ -136,7 +136,7 @@ export default function Assist() {
                       {/* Action Buttons */}
                       <div className="flex items-start gap-2 flex-shrink-0 pt-0.5">
                         <button
-                          onClick={() => handleConfirm(guest.id, true)}
+                          onClick={() => handleConfirm(guest.id, guest.confirmed === true ? null : true)}
                           className={`
                             w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-full font-medium text-sm transition-colors flex items-center justify-center
                             ${guest.confirmed === true
@@ -149,7 +149,7 @@ export default function Assist() {
                           <span className="hidden sm:inline ml-1">Sí</span>
                         </button>
                         <button
-                          onClick={() => handleConfirm(guest.id, false)}
+                          onClick={() => handleConfirm(guest.id, guest.confirmed === false ? null : false)}
                           className={`
                             w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-full font-medium text-sm transition-colors flex items-center justify-center
                             ${guest.confirmed === false

@@ -122,7 +122,7 @@ export async function removeReservation(giftId: string, userName: string): Promi
 export interface Guest {
   id: number; // bigint
   name: string | null;
-  confirmed: boolean;
+  confirmed: boolean | null;
   confirmed_at: string | null;
   created_at: string;
   category: string | null;
@@ -145,15 +145,17 @@ export async function fetchGuests(): Promise<Guest[]> {
 
 export async function updateGuestConfirmation(
   guestId: number,
-  confirmed: boolean
+  confirmed: boolean | null
 ): Promise<Guest> {
   const updateData: Partial<Guest> = {
     confirmed,
   };
 
-  // Set confirmed_at if confirming
-  if (confirmed) {
+  // Set confirmed_at if confirming, clear if null
+  if (confirmed === true) {
     updateData.confirmed_at = new Date().toISOString();
+  } else if (confirmed === null) {
+    updateData.confirmed_at = null;
   }
 
   const supabase = getSupabaseClient();
