@@ -4,9 +4,16 @@ import favicon from "../assets/favicon.svg";
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  url?: string;
 }
 
-const { title, description = "Baby Shower" } = Astro.props;
+const { 
+  title, 
+  description = "Baby Shower Emily - Te invitamos a celebrar la llegada de nuestro más grande tesoro",
+  image = "/banner.png",
+  url = Astro.url.href
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -17,6 +24,24 @@ const { title, description = "Baby Shower" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href={favicon.src}>
     <meta name="generator" content={Astro.generator} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, url).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_ES" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={url} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, url).href} />
+    
     <title>{title}</title>
   </head>
   <body class="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
