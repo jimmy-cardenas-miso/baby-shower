@@ -82,7 +82,7 @@ export default function Messages() {
   };
 
   return (
-    <section id="mensajes" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen">
+    <section id="mensajes" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-pink-50 min-h-screen">
       <div className="max-w-3xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
