@@ -27,7 +27,7 @@ export default function Assist() {
   const handleConfirm = async (id: number, confirmed: boolean) => {
     try {
       const updatedGuest = await updateGuestConfirmation(id, confirmed);
-      setGuests(guests.map(guest => 
+      setGuests(guests.map(guest =>
         guest.id === id ? updatedGuest : guest
       ));
     } catch (error) {
@@ -77,8 +77,8 @@ export default function Assist() {
             ¿Nos acompañas?
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Para confirmar tu asistencia, busca tu nombre o el de tu acompañante en la lista. 
-            Si no encuentras tu nombre, por favor contáctanos a Diego o Xiomy.
+            Para confirmar tu asistencia, busca tu nombre o el de tu acompañante en la lista.
+            Si no encuentras tu nombre, por favor contáctanos a Jimmy o Tatis.
           </p>
         </div>
 
