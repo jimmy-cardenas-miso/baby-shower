@@ -165,7 +165,9 @@ export default function Gifts() {
 
           {/* Environmental Message */}
           <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 text-sm px-4 py-2 rounded-full mb-4">
-            <Icon name="eco" size={16} />
+            <span className="flex-shrink-0 scale-150 sm:scale-100 inline-flex items-center">
+              <Icon name="eco" size={16} />
+            </span>
             <span>
               Cuidemos juntos el medio ambiente, se vale recircular objetos de segunda mano y evitar papel regalo de un sólo uso ❤️
             </span>
@@ -173,7 +175,9 @@ export default function Gifts() {
 
           {/* Multiple Reservations Message */}
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded-full mb-8">
-            <Icon name="info" size={16} />
+            <span className="flex-shrink-0 scale-150 sm:scale-100 inline-flex items-center">
+              <Icon name="info" size={16} />
+            </span>
             <span>
               Recuerda que el mismo regalo puede ser reservado por varias personas 🎁
             </span>
