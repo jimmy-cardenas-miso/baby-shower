@@ -126,7 +126,7 @@ export default function Navbar() {
                 title={item.label}
               >
                 <span
-                  className={`flex ${
+                  className={`flex items-center justify-center ${
                     activeSection === item.id ? 'text-pink-600' : 'text-gray-400'
                   }`}
                 >
