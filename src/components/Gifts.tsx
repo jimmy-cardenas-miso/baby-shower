@@ -11,6 +11,7 @@ export default function Gifts() {
   const [reserveName, setReserveName] = useState<string>('');
   const [showRemoveReservationModal, setShowRemoveReservationModal] = useState(false);
   const [reservationToRemove, setReservationToRemove] = useState<{ giftId: string; giftName: string; userName: string } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ url: string; name: string } | null>(null);
 
   // Extraer categorías únicas de los gifts
   const categories = useMemo(() => {
@@ -104,6 +105,25 @@ export default function Gifts() {
     setShowRemoveReservationModal(false);
     setReservationToRemove(null);
   };
+
+  const handleImageClick = (imageUrl: string, giftName: string) => {
+    setSelectedImage({ url: `/images/${imageUrl}`, name: giftName });
+  };
+
+  const handleCloseImageModal = () => {
+    setSelectedImage(null);
+  };
+
+  // Cerrar modal con tecla ESC
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedImage) {
+        handleCloseImageModal();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedImage]);
 
   const getReservations = (gift: Gift): string[] => {
     // Use reservations array if available, otherwise fallback to reserved_by
@@ -217,7 +237,8 @@ export default function Gifts() {
                         <img
                           src={`/images/${gift.image_url}`}
                           alt={gift.name}
-                          className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer"
+                          onClick={() => handleImageClick(gift.image_url!, gift.name)}
                         />
                       ) : (
                         <div className="text-6xl">{gift.icon || '🐣'}</div>
@@ -333,6 +354,40 @@ export default function Gifts() {
           </div>
         )}
       </div>
+
+      {/* Modal de imagen grande */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          onClick={handleCloseImageModal}
+        >
+          <div 
+            className="relative max-w-6xl max-h-[90vh] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Botón cerrar */}
+            <button
+              onClick={handleCloseImageModal}
+              className="absolute top-4 right-4 z-10 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 transition-all duration-200 shadow-lg hover:scale-110"
+              aria-label="Cerrar"
+            >
+              <Icon name="close" className="text-gray-800" size={24} />
+            </button>
+
+            {/* Título del regalo */}
+            <div className="absolute top-4 left-4 z-10 bg-white bg-opacity-90 rounded-lg px-4 py-2 shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800">{selectedImage.name}</h3>
+            </div>
+
+            {/* Imagen */}
+            <img
+              src={selectedImage.url}
+              alt={selectedImage.name}
+              className="w-full h-auto max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Modal de confirmación para eliminar reserva */}
       {showRemoveReservationModal && reservationToRemove && (
