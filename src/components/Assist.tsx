@@ -6,6 +6,8 @@ export default function Assist() {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [guestToRemove, setGuestToRemove] = useState<{ id: number; name: string | null; newStatus: boolean | null } | null>(null);
 
   useEffect(() => {
     loadGuests();
@@ -35,6 +37,29 @@ export default function Assist() {
       console.error('Error updating guest:', error);
       alert('Error al actualizar la confirmación. Por favor intenta de nuevo.');
     }
+  };
+
+  const handleConfirmClick = (guest: Guest, newStatus: boolean | null) => {
+    // Si está confirmado (true) y se intenta cambiar a null o false, mostrar modal
+    if (guest.confirmed === true && (newStatus === null || newStatus === false)) {
+      setGuestToRemove({ id: guest.id, name: guest.name, newStatus });
+      setShowRemoveModal(true);
+    } else {
+      handleConfirm(guest.id, newStatus);
+    }
+  };
+
+  const handleRemoveConfirmation = () => {
+    if (guestToRemove) {
+      handleConfirm(guestToRemove.id, guestToRemove.newStatus);
+      setShowRemoveModal(false);
+      setGuestToRemove(null);
+    }
+  };
+
+  const handleCancelRemove = () => {
+    setShowRemoveModal(false);
+    setGuestToRemove(null);
   };
 
   const filteredGuests = guests.filter(guest =>
@@ -136,7 +161,7 @@ export default function Assist() {
                       {/* Action Buttons */}
                       <div className="flex items-start gap-2 flex-shrink-0 pt-0.5">
                         <button
-                          onClick={() => handleConfirm(guest.id, guest.confirmed === true ? null : true)}
+                          onClick={() => handleConfirmClick(guest, guest.confirmed === true ? null : true)}
                           className={`
                             w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-full font-medium text-sm transition-colors flex items-center justify-center
                             ${guest.confirmed === true
@@ -149,7 +174,7 @@ export default function Assist() {
                           <span className="hidden sm:inline ml-1">Sí</span>
                         </button>
                         <button
-                          onClick={() => handleConfirm(guest.id, guest.confirmed === false ? null : false)}
+                          onClick={() => handleConfirmClick(guest, guest.confirmed === false ? null : false)}
                           className={`
                             w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-full font-medium text-sm transition-colors flex items-center justify-center
                             ${guest.confirmed === false
@@ -187,6 +212,47 @@ export default function Assist() {
           </button>
         </div>
       </div>
+
+      {/* Modal de confirmación para quitar asistencia */}
+      {showRemoveModal && guestToRemove && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={handleCancelRemove}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 sm:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <Icon name="warning" className="text-red-600" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">
+                {guestToRemove.newStatus === false ? '¿Cambiar a "No asistirá"?' : '¿Quitar asistencia?'}
+              </h3>
+            </div>
+            
+            <p className="text-gray-600 mb-6">
+              ¿Estás seguro de que quieres {guestToRemove.newStatus === false ? 'cambiar la confirmación de' : 'quitar la asistencia de'} <span className="font-semibold text-gray-800">{guestToRemove.name || 'esta persona'}</span> al evento?
+            </p>
+
+            <div className="flex flex-col-reverse sm:flex-row gap-3">
+              <button
+                onClick={handleCancelRemove}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleRemoveConfirmation}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+              >
+                {guestToRemove.newStatus === false ? 'Sí, cambiar a "No"' : 'Sí, quitar asistencia'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
