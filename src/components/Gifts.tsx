@@ -1,11 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import { fetchGifts, reserveGift, type Gift } from '../lib/api';
+import { fetchGifts, reserveGift, removeReservation, type Gift } from '../lib/api';
 
 export default function Gifts() {
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<string>('todos');
   const [reservingGiftId, setReservingGiftId] = useState<string | null>(null);
+  const [showingReserveForm, setShowingReserveForm] = useState<string | null>(null);
+  const [reserveName, setReserveName] = useState<string>('');
 
   // Extraer categorías únicas de los gifts
   const categories = useMemo(() => {
@@ -35,19 +37,50 @@ export default function Gifts() {
     ? gifts 
     : gifts.filter(gift => gift.category === activeFilter);
 
-  const handleReserve = async (giftId: string) => {
-    const userName = prompt('Por favor, ingresa tu nombre para reservar este regalo:');
-    if (!userName || !userName.trim()) return;
+  const handleReserveClick = (giftId: string) => {
+    if (showingReserveForm === giftId) {
+      // Si ya está mostrando el formulario para este gift, cerrarlo
+      setShowingReserveForm(null);
+      setReserveName('');
+    } else {
+      // Mostrar el formulario para el nuevo gift
+      setShowingReserveForm(giftId);
+      setReserveName('');
+    }
+  };
+
+  const handleConfirmReserve = async (giftId: string) => {
+    if (!reserveName || !reserveName.trim()) {
+      alert('Por favor ingresa tu nombre');
+      return;
+    }
 
     try {
       setReservingGiftId(giftId);
-      const updatedGift = await reserveGift(giftId, userName.trim());
+      const updatedGift = await reserveGift(giftId, reserveName.trim());
       setGifts(gifts.map(g => g.id === giftId ? updatedGift : g));
+      setShowingReserveForm(null);
+      setReserveName('');
     } catch (error) {
       console.error('Error reserving gift:', error);
       alert('Error al reservar el regalo. Por favor intenta de nuevo.');
     } finally {
       setReservingGiftId(null);
+    }
+  };
+
+  const handleCancelReserve = () => {
+    setShowingReserveForm(null);
+    setReserveName('');
+  };
+
+  const handleRemoveReservation = async (giftId: string, userName: string) => {
+    try {
+      const updatedGift = await removeReservation(giftId, userName);
+      setGifts(gifts.map(g => g.id === giftId ? updatedGift : g));
+    } catch (error) {
+      console.error('Error removing reservation:', error);
+      alert('Error al eliminar la reserva. Por favor intenta de nuevo.');
     }
   };
 
@@ -63,7 +96,9 @@ export default function Gifts() {
   };
 
   const isAvailable = (gift: Gift): boolean => {
-    return gift.status === 'available' || gift.status === null;
+    // Permite reservar siempre, incluso si ya hay reservas
+    // El sistema permite múltiples reservas por regalo
+    return true;
   };
 
   return (
@@ -167,7 +202,7 @@ export default function Gifts() {
                     {/* Product Info */}
                     <div className="p-5">
                       {/* Price Range */}
-                      <p className="text-xs text-gray-500 mb-2">{gift.price_range}</p>
+                      <p className="text-xs text-gray-500 mb-2">{gift.category}</p>
 
                       {/* Title */}
                       <h3 className="text-lg font-semibold text-gray-800 mb-1">
@@ -181,7 +216,7 @@ export default function Gifts() {
 
                       {/* Reservations */}
                       {reservations.length > 0 && (
-                        <div className="mb-4">
+                        <div className="mb-4 bg-purple-50 rounded-lg p-3">
                           <div className="flex items-center gap-1 mb-2">
                             <span className="material-symbols-outlined text-base text-gray-500">
                               person
@@ -194,47 +229,85 @@ export default function Gifts() {
                             {reservations.map((name, index) => (
                               <span
                                 key={index}
-                                className="bg-pink-100 text-pink-700 text-xs font-medium px-3 py-1 rounded-full"
+                                className="bg-pink-100 text-pink-700 text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1.5"
                               >
                                 {name}
+                                <button
+                                  onClick={() => handleRemoveReservation(gift.id, name)}
+                                  className="hover:bg-pink-200 rounded-full p-0.5 transition-colors"
+                                  aria-label={`Eliminar reserva de ${name}`}
+                                >
+                                  <span className="material-symbols-outlined text-sm">
+                                    close
+                                  </span>
+                                </button>
                               </span>
                             ))}
                           </div>
                         </div>
                       )}
 
-                      {/* Action Buttons */}
-                      <div className="flex gap-2 mt-4">
-                        {available && (
-                          <button
-                            onClick={() => handleReserve(gift.id)}
-                            disabled={reservingGiftId === gift.id}
-                            className="flex-1 bg-pink-500 hover:bg-pink-600 disabled:bg-pink-300 text-white font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
-                          >
-                            {reservingGiftId === gift.id ? (
-                              <>Reservando...</>
-                            ) : (
-                              <>
-                                <span className="material-symbols-outlined text-base">
-                                  check
-                                </span>
-                                <span>Reservar</span>
-                              </>
-                            )}
-                          </button>
-                        )}
-                        {gift.product_url && (
-                          <button
-                            onClick={() => window.open(gift.product_url!, '_blank')}
-                            className="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
-                          >
-                            <span className="material-symbols-outlined text-base">
-                              open_in_new
-                            </span>
-                            <span>Ver Producto</span>
-                          </button>
-                        )}
-                      </div>
+                      {/* Reserve Form or Action Buttons */}
+                      {showingReserveForm === gift.id ? (
+                        <div className="mt-4 space-y-3">
+                          <input
+                            type="text"
+                            value={reserveName}
+                            onChange={(e) => setReserveName(e.target.value)}
+                            placeholder="Tu nombre"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleConfirmReserve(gift.id);
+                              } else if (e.key === 'Escape') {
+                                handleCancelReserve();
+                              }
+                            }}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleConfirmReserve(gift.id)}
+                              disabled={reservingGiftId === gift.id || !reserveName.trim()}
+                              className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
+                            >
+                              {reservingGiftId === gift.id ? 'Guardando...' : 'Confirmar'}
+                            </button>
+                            <button
+                              onClick={handleCancelReserve}
+                              disabled={reservingGiftId === gift.id}
+                              className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 font-medium py-2.5 px-4 rounded-lg text-sm transition-colors"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex gap-2 mt-4">
+                          {available && (
+                            <button
+                              onClick={() => handleReserveClick(gift.id)}
+                              className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-base">
+                                check
+                              </span>
+                              <span>Reservar</span>
+                            </button>
+                          )}
+                          {gift.product_url && (
+                            <button
+                              onClick={() => window.open(gift.product_url!, '_blank')}
+                              className="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2.5 px-4 rounded-lg text-sm flex items-center justify-center gap-1.5 transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-base">
+                                open_in_new
+                              </span>
+                              <span>Ver Producto</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
