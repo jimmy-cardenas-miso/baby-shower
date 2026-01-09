@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Icon from './Icons';
 import { fetchMessages, createMessage, likeMessage, type Message } from '../lib/api';
 
 const avatarColors = ['bg-pink-500', 'bg-purple-500', 'bg-blue-500'];
@@ -82,15 +83,13 @@ export default function Messages() {
   };
 
   return (
-    <section id="mensajes" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen">
+    <section id="mensajes" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-pink-50 min-h-screen">
       <div className="max-w-3xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
           {/* Tag */}
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
-            <span className="material-symbols-outlined text-base text-blue-700">
-              chat
-            </span>
+            <Icon name="chat" className="text-blue-700" size={16} />
             <span>Mural de Mensajes</span>
           </div>
 
@@ -135,9 +134,7 @@ export default function Messages() {
                 <>Enviando...</>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-lg">
-                    send
-                  </span>
+                  <Icon name="send" size={20} />
                   <span>Enviar Mensaje</span>
                 </>
               )}
@@ -170,9 +167,7 @@ export default function Messages() {
                     onClick={() => handleLike(msg.id)}
                     className="absolute top-4 right-4 flex items-center gap-1 text-gray-400 hover:text-pink-500 transition-colors"
                   >
-                    <span className="material-symbols-outlined text-lg">
-                      favorite
-                    </span>
+                    <Icon name="favorite" size={20} />
                     <span className="text-sm">{msg.likes}</span>
                   </button>
 

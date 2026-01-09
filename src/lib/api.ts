@@ -78,6 +78,46 @@ export async function reserveGift(giftId: string, userName: string): Promise<Gif
   };
 }
 
+export async function removeReservation(giftId: string, userName: string): Promise<Gift> {
+  const supabase = getSupabaseClient();
+  // First, get the current gift to check its reservations
+  const { data: currentGift, error: fetchError } = await supabase
+    .from('gifts')
+    .select('*')
+    .eq('id', giftId)
+    .single();
+
+  if (fetchError || !currentGift) {
+    throw new Error('Gift not found');
+  }
+
+  // Remove the user from reservations array
+  const currentReservations = currentGift.reservations || [];
+  const updatedReservations = currentReservations.filter(name => name !== userName);
+
+  // Update the gift
+  const { data, error } = await supabase
+    .from('gifts')
+    .update({
+      reservations: updatedReservations,
+      reserved_by: updatedReservations.length > 0 ? updatedReservations[0] : null, // Keep for backward compatibility
+      status: updatedReservations.length > 0 ? 'reserved' : 'available',
+    })
+    .eq('id', giftId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error removing reservation:', error);
+    throw new Error('Failed to remove reservation');
+  }
+
+  return {
+    ...data,
+    reservations: data.reservations || [],
+  };
+}
+
 // Guests API
 export interface Guest {
   id: number; // bigint
