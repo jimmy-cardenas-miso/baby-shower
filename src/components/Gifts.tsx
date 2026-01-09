@@ -9,6 +9,8 @@ export default function Gifts() {
   const [reservingGiftId, setReservingGiftId] = useState<string | null>(null);
   const [showingReserveForm, setShowingReserveForm] = useState<string | null>(null);
   const [reserveName, setReserveName] = useState<string>('');
+  const [showRemoveReservationModal, setShowRemoveReservationModal] = useState(false);
+  const [reservationToRemove, setReservationToRemove] = useState<{ giftId: string; giftName: string; userName: string } | null>(null);
 
   // Extraer categorías únicas de los gifts
   const categories = useMemo(() => {
@@ -75,6 +77,11 @@ export default function Gifts() {
     setReserveName('');
   };
 
+  const handleRemoveReservationClick = (giftId: string, giftName: string, userName: string) => {
+    setReservationToRemove({ giftId, giftName, userName });
+    setShowRemoveReservationModal(true);
+  };
+
   const handleRemoveReservation = async (giftId: string, userName: string) => {
     try {
       const updatedGift = await removeReservation(giftId, userName);
@@ -83,6 +90,19 @@ export default function Gifts() {
       console.error('Error removing reservation:', error);
       alert('Error al eliminar la reserva. Por favor intenta de nuevo.');
     }
+  };
+
+  const handleConfirmRemoveReservation = () => {
+    if (reservationToRemove) {
+      handleRemoveReservation(reservationToRemove.giftId, reservationToRemove.userName);
+      setShowRemoveReservationModal(false);
+      setReservationToRemove(null);
+    }
+  };
+
+  const handleCancelRemoveReservation = () => {
+    setShowRemoveReservationModal(false);
+    setReservationToRemove(null);
   };
 
   const getReservations = (gift: Gift): string[] => {
@@ -236,7 +256,7 @@ export default function Gifts() {
                               >
                                 {name}
                                 <button
-                                  onClick={() => handleRemoveReservation(gift.id, name)}
+                                  onClick={() => handleRemoveReservationClick(gift.id, gift.name, name)}
                                   className="hover:bg-pink-200 rounded-full p-0.5 transition-colors"
                                   aria-label={`Eliminar reserva de ${name}`}
                                 >
@@ -313,6 +333,45 @@ export default function Gifts() {
           </div>
         )}
       </div>
+
+      {/* Modal de confirmación para eliminar reserva */}
+      {showRemoveReservationModal && reservationToRemove && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={handleCancelRemoveReservation}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 sm:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <Icon name="warning" className="text-red-600" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">¿Eliminar reserva?</h3>
+            </div>
+            
+            <p className="text-gray-600 mb-6">
+              ¿Estás seguro de que quieres eliminar la reserva de <span className="font-semibold text-gray-800">{reservationToRemove.userName}</span> para el regalo <span className="font-semibold text-gray-800">{reservationToRemove.giftName}</span>?
+            </p>
+
+            <div className="flex flex-col-reverse sm:flex-row gap-3">
+              <button
+                onClick={handleCancelRemoveReservation}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmRemoveReservation}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+              >
+                Sí, eliminar reserva
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
