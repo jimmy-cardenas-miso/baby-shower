@@ -56,5 +56,29 @@ const { title, description = "Baby Shower" } = Astro.props;
     /* Font display swap ensures text is visible immediately */
     font-display: swap;
   }
+
+  /* Custom scrollbar with pink to purple gradient */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #ec4899, #a855f7);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #db2777, #9333ea);
+  }
+
+  /* Firefox scrollbar */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #a855f7 #f3f4f6;
+  }
 </style>
 
