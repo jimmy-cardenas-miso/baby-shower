@@ -1,11 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { fetchGifts, reserveGift, type Gift } from '../lib/api';
 
 export default function Gifts() {
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<'todos' | 'economico' | 'moderado' | 'premium'>('todos');
+  const [activeFilter, setActiveFilter] = useState<string>('todos');
   const [reservingGiftId, setReservingGiftId] = useState<string | null>(null);
+
+  // Extraer categorías únicas de los gifts
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(new Set(gifts.map(gift => gift.category).filter(Boolean)));
+    return uniqueCategories.sort();
+  }, [gifts]);
 
   useEffect(() => {
     loadGifts();
@@ -106,36 +112,19 @@ export default function Gifts() {
           >
             Todos
           </button>
-          <button
-            onClick={() => setActiveFilter('economico')}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'economico'
-                ? 'bg-pink-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            Económico
-          </button>
-          <button
-            onClick={() => setActiveFilter('moderado')}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'moderado'
-                ? 'bg-pink-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            Moderado
-          </button>
-          <button
-            onClick={() => setActiveFilter('premium')}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'premium'
-                ? 'bg-pink-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            Premium
-          </button>
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveFilter(category)}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeFilter === category
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
 
         {/* Loading State */}
