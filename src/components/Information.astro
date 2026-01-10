@@ -71,7 +71,7 @@ import Icon from './Icon.astro';
             onclick="document.getElementById('confirmar')?.scrollIntoView({ behavior: 'smooth' })"
             class="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
           >
-            <Icon name="keyboard_arrow_down" size={20} />
+            <span class="hidden sm:inline"><Icon name="keyboard_arrow_down" size={20}/></span>
             <span>Confirmar mi asistencia <Icon name="arrow_downward" size={20} /></span>
           </button>
         </div>
