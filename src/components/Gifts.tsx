@@ -174,12 +174,22 @@ export default function Gifts() {
           </div>
 
           {/* Multiple Reservations Message */}
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded-full mb-8">
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded-full mb-4">
             <span className="flex-shrink-0 scale-150 sm:scale-100 inline-flex items-center">
               <Icon name="info" size={16} />
             </span>
             <span>
               Recuerda que el mismo regalo puede ser reservado por varias personas 🎁
+            </span>
+          </div>
+
+          {/* Diaper Shower Message */}
+          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 text-sm px-4 py-2 rounded-full ml-2 mb-8">
+            <span className="flex-shrink-0 scale-150 sm:scale-100 inline-flex items-center">
+              <Icon name="child_care" size={16} />
+            </span>
+            <span>
+              También puedes traer pañales etapa 1, 2 o 3 para la lluvia de pañales 🍼
             </span>
           </div>
         </div>
