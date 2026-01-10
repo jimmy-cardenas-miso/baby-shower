@@ -62,9 +62,16 @@ export default function Assist() {
     setGuestToRemove(null);
   };
 
-  const filteredGuests = guests.filter(guest =>
-    guest.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredGuests = guests
+    .filter(guest =>
+      guest.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      // Primero los que no tienen confirmed (null), luego los demás
+      if (a.confirmed === null && b.confirmed !== null) return -1;
+      if (a.confirmed !== null && b.confirmed === null) return 1;
+      return 0;
+    });
 
   const confirmedCount = guests.filter(g => g.confirmed === true).length;
 
