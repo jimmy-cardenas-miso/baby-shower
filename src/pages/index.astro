@@ -5,6 +5,7 @@ export const prerender = true;
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
 import Home from '../components/Home.astro';
+import Countdown from '../components/Countdown';
 import Information from '../components/Information.astro';
 import Assist from '../components/Assist';
 import Gifts from '../components/Gifts';
@@ -17,6 +18,7 @@ import Footer from '../components/Footer.astro';
   <main class="min-h-screen pt-16">
     <Home />
     <Information />
+    <Countdown client:load />
     <Assist client:load />
     <Gifts client:load />
     <Messages client:load />
