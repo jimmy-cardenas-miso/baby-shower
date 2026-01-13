@@ -12,6 +12,8 @@ export default function Gifts() {
   const [showRemoveReservationModal, setShowRemoveReservationModal] = useState(false);
   const [reservationToRemove, setReservationToRemove] = useState<{ giftId: string; giftName: string; userName: string } | null>(null);
   const [selectedImage, setSelectedImage] = useState<{ url: string; name: string } | null>(null);
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Extraer categorías únicas de los gifts
   const categories = useMemo(() => {
@@ -37,9 +39,23 @@ export default function Gifts() {
     }
   };
 
-  const filteredGifts = activeFilter === 'todos' 
-    ? gifts 
-    : gifts.filter(gift => gift.category === activeFilter);
+  const filteredGifts = useMemo(() => {
+    let filtered = activeFilter === 'todos' 
+      ? gifts 
+      : gifts.filter(gift => gift.category === activeFilter);
+    
+    // Aplicar filtro de búsqueda si hay una consulta
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(gift => 
+        gift.name.toLowerCase().includes(query) ||
+        gift.description?.toLowerCase().includes(query) ||
+        gift.category?.toLowerCase().includes(query)
+      );
+    }
+    
+    return filtered;
+  }, [gifts, activeFilter, searchQuery]);
 
   const handleReserveClick = (giftId: string) => {
     if (showingReserveForm === giftId) {
@@ -194,31 +210,78 @@ export default function Gifts() {
           </div>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
-          <button
-            onClick={() => setActiveFilter('todos')}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === 'todos'
-                ? 'bg-pink-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            Todos
-          </button>
-          {categories.map((category) => (
+        {/* Filter Buttons and Search */}
+        <div className="mb-8">
+          <div className="flex flex-wrap justify-center items-center gap-3 mb-4">
             <button
-              key={category}
-              onClick={() => setActiveFilter(category)}
+              onClick={() => setActiveFilter('todos')}
               className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeFilter === category
+                activeFilter === 'todos'
                   ? 'bg-pink-500 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
-              {category}
+              Todos
             </button>
-          ))}
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveFilter(category)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                  activeFilter === category
+                    ? 'bg-pink-500 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+            <button
+              onClick={() => {
+                setSearchVisible(!searchVisible);
+                if (searchVisible) {
+                  setSearchQuery('');
+                }
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+                searchVisible
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
+              }`}
+              aria-label="Buscar productos"
+            >
+              <Icon name="search" size={18} />
+              <span className="hidden sm:inline">Buscar</span>
+            </button>
+          </div>
+          
+          {/* Search Bar */}
+          {searchVisible && (
+            <div className="flex justify-center mb-4">
+              <div className="relative w-full max-w-md">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar productos..."
+                  className="w-full border border-gray-300 rounded-full px-5 py-3 pl-12 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent shadow-sm"
+                  autoFocus
+                />
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <Icon name="search" className="text-gray-400" size={20} />
+                </div>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Limpiar búsqueda"
+                  >
+                    <Icon name="close" size={20} />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Loading State */}
