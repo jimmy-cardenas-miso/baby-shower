@@ -8,6 +8,12 @@ export default function Assist() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [guestToRemove, setGuestToRemove] = useState<{ id: number; name: string | null; newStatus: boolean | null } | null>(null);
+  const [showRestrictedModal, setShowRestrictedModal] = useState(false);
+
+  const RESTRICTED_NAMES = ['Felipe Mora', 'Valentina Carrillo'];
+  
+  const isRestrictedGuest = (name: string | null) =>
+    name != null && RESTRICTED_NAMES.some(restricted => name.trim() === restricted);
 
   useEffect(() => {
     loadGuests();
@@ -40,8 +46,13 @@ export default function Assist() {
   };
 
   const handleConfirmClick = (guest: Guest, newStatus: boolean | null) => {
-    // Si está confirmado (true) y se intenta cambiar a null o false, mostrar modal
+    // Si está confirmado (true) y se intenta cambiar a null o false
     if (guest.confirmed === true && (newStatus === null || newStatus === false)) {
+      // Felipe Mora y Valentina Carrillo no pueden tener su reserva cancelada
+      if (isRestrictedGuest(guest.name)) {
+        setShowRestrictedModal(true);
+        return;
+      }
       setGuestToRemove({ id: guest.id, name: guest.name, newStatus });
       setShowRemoveModal(true);
     } else {
@@ -257,6 +268,39 @@ export default function Assist() {
                 {guestToRemove.newStatus === false ? 'Sí, cambiar a "No"' : 'Sí, quitar asistencia'}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: no se puede cancelar reserva (Felipe Mora / Valentina Carrillo) */}
+      {showRestrictedModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowRestrictedModal(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 sm:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                <Icon name="warning" className="text-amber-600" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800">
+                No se puede cancelar esta reserva
+              </h3>
+            </div>
+
+            <p className="text-gray-600 mb-6">
+              No puedes cancelar la reserva de esta persona. Por favor comunícate con los papás de Emily.
+            </p>
+
+            <button
+              onClick={() => setShowRestrictedModal(false)}
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+            >
+              Entendido
+            </button>
           </div>
         </div>
       )}
