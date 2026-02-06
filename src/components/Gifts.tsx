@@ -14,6 +14,7 @@ export default function Gifts() {
   const [selectedImage, setSelectedImage] = useState<{ url: string; name: string } | null>(null);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [showOnlyUnreserved, setShowOnlyUnreserved] = useState(false);
 
   // Extraer categorías únicas de los gifts
   const categories = useMemo(() => {
@@ -39,6 +40,9 @@ export default function Gifts() {
     }
   };
 
+  const hasReservations = (gift: Gift): boolean =>
+    Boolean((gift.reservations && gift.reservations.length > 0) || gift.reserved_by);
+
   const filteredGifts = useMemo(() => {
     let filtered = activeFilter === 'todos' 
       ? gifts 
@@ -53,9 +57,13 @@ export default function Gifts() {
         gift.category?.toLowerCase().includes(query)
       );
     }
+
+    if (showOnlyUnreserved) {
+      filtered = filtered.filter(gift => !hasReservations(gift));
+    }
     
     return filtered;
-  }, [gifts, activeFilter, searchQuery]);
+  }, [gifts, activeFilter, searchQuery, showOnlyUnreserved]);
 
   const handleReserveClick = (giftId: string) => {
     if (showingReserveForm === giftId) {
@@ -236,6 +244,19 @@ export default function Gifts() {
                 {category}
               </button>
             ))}
+            <button
+              onClick={() => setShowOnlyUnreserved((prev) => !prev)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+                showOnlyUnreserved
+                  ? 'bg-green-500 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
+              }`}
+              aria-pressed={showOnlyUnreserved}
+              aria-label="Mostrar solo regalos sin reservar"
+            >
+              <Icon name="check" size={18} />
+              <span>Sin reservar</span>
+            </button>
             <button
               onClick={() => {
                 setSearchVisible(!searchVisible);
